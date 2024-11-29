@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo de Amor</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #d4a5d9, #b56eb3); /* Fundo degradê roxo */
+            color: white;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: #fff;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+        }
+        p {
+            font-size: 1.5rem;
+            margin: 20px 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+        }
+        .seta {
+            font-size: 3rem;
+            color: white;
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .seta:hover {
+            transform: scale(1.1);
+        }
+        .img-container img {
+            width: 100%;
+            max-width: 300px;
+            height: auto;
+            margin-top: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        button {
+            font-size: 1.2rem;
+            margin: 10px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        .botao-certo {
+            background-color: #6a0dad;
+            color: white;
+        }
+        .botao-certo:hover {
+            background-color: #824bb3;
+            transform: scale(1.05);
+        }
+        .botao-erro {
+            background-color: #f44336;
+            color: white;
+        }
+        .botao-erro:hover {
+            background-color: #d32f2f;
+            transform: scale(1.05);
+        }
+        .progress-bar {
+            width: 80%;
+            background-color: #ddd;
+            border-radius: 20px;
+            margin: 20px auto;
+            height: 25px;
+            overflow: hidden;
+        }
+        .progress-bar div {
+            height: 100%;
+            background-color: #6a0dad;
+            width: 0;
+            border-radius: 20px;
+            transition: width 0.5s ease;
+        }
+        .foto-container img {
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            border: 5px solid white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            margin-top: 20px;
+        }
+        #final {
+            font-size: 2.5rem;
+            color: #ff4081;
+            margin-top: 20px;
+        }
+        #porcentagem {
+            font-size: 1.2rem;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <!-- Página 1 -->
+        <div id="pagina1">
+            <h1>Jogo de Amor</h1>
+            <p>Você sabe o que você é capaz de fazer com meus dias?</p>
+            <button class="botao-certo" onclick="proximaPagina(2)">Sim</button>
+            <button class="botao-erro" onclick="naoQuero()">Não, não quero</button>
+            <button class="botao-certo" onclick="proximaPagina(2)">Não, quero descobrir...</button>
+        </div>
+
+        <!-- Página 2 -->
+        <div id="pagina2" style="display:none;">
+            <h1>Meu dia sem você:</h1>
+            <button class="seta" onclick="proximaPagina(3)">➡️</button>
+        </div>
+
+        <!-- Página 3 -->
+        <div id="pagina3" style="display:none;">
+            <div class="img-container">
+                <img src="images/flor_murcha.jpg" alt="Flor Murcha">
+            </div>
+            <button class="seta" onclick="proximaPagina(4)">➡️</button>
+        </div>
+
+        <!-- Página 4 -->
+        <div id="pagina4" style="display:none;">
+            <h1>Meu dia com você:</h1>
+            <button class="seta" onclick="proximaPagina(5)">➡️</button>
+        </div>
+
+        <!-- Página 5 -->
+        <div id="pagina5" style="display:none;">
+            <div class="img-container">
+                <img src="images/girassol_feliz.jpg" alt="Girassol Feliz">
+            </div>
+            <button class="seta" onclick="proximaPagina(6)">➡️</button>
+        </div>
+
+        <!-- Página 6 -->
+        <div id="pagina6" style="display:none;">
+            <h1 id="final">TE AMOOOOO, GOSTOU?</h1>
+            <div class="foto-container">
+                <img src="images/sua_foto.jpg" alt="Sua Foto">
+            </div>
+            <div class="progress-bar">
+                <div id="progress"></div>
+            </div>
+            <div id="porcentagem">Porcentagem: 0%</div>
+            <button class="botao-erro" onclick="atualizarProgresso(false)">💔</button>
+            <button class="botao-certo" onclick="atualizarProgresso(true)">❤️</button>
+        </div>
+
+    </div>
+
+    <script>
+        let progresso = 0;
+
+        function proximaPagina(pagina) {
+            document.querySelectorAll("div[id^='pagina']").forEach(p => p.style.display = "none");
+            document.getElementById(`pagina${pagina}`).style.display = "block";
+        }
+
+        function naoQuero() {
+            alert("Como assim não quer? Você não tem querer!");
+            proximaPagina(2);
+        }
+
+        function atualizarProgresso(correto) {
+            progresso += correto ? 10 : -10;
+            progresso = Math.max(0, Math.min(100, progresso));
+
+            document.getElementById("progress").style.width = `${progresso}%`;
+            document.getElementById("porcentagem").innerText = `Porcentagem: ${progresso}%`;
+
+            if (progresso === 100) {
+                document.getElementById("final").innerText = "MUITOOOO❤️";
+            }
+        }
+
+        proximaPagina(1);
+    </script>
+</body>
+</html>
